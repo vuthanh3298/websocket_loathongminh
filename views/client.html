@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+    
+  <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+    <!-- Brand -->
+    <a class="navbar-brand" href="https://ce.uit.edu.vn/" target="_blank">
+      <img src="/imgs/ce.png" width="100" height="100" />
+    </a>
+
+
+    <!-- Navbar links -->
+    <div class="collapse navbar-collapse" style="text-align:center;  display: block !important;";>
+      <h2 style="color:white;" >DEMO LOA THÔNG MINH<h2>
+    </div>
+  </nav>
+
+  <div style="text-align:center; display: block !important; height:60px; background:yellow; margin:20px; padding:10px; border: 2px solid red !important;  border-radius: 8px;">
+    <h3 id="detected" style="color:blue;">Detected: </h3>
+  </div>
+    <img id="img" src="/imgs/den-tat.jpg" width="300" height="350">
+</body>
+  
+<script>
+    // Create WebSocket connection.
+    const socket = new WebSocket('ws://192.168.1.3:3000');
+
+    // Connection opened
+    socket.addEventListener('open', function (event) {
+        console.log('Connected to WS Server')
+    });
+
+    let detected;
+    // Listen for messages
+    socket.addEventListener('message', function (event) {
+        console.log('Message from server ', event.data);
+        const txt = document.getElementById("detected");
+        const img = document.getElementById("img");
+        switch(event.data){
+            case '1': {
+                detected = "bật đèn";
+                img.src="/imgs/den-sang.jpg";
+                break;
+            }
+            case '2': {
+                detected = "bật quạt";
+                break;
+            }
+            case '3': {
+                detected = "tắt đèn";
+                 img.src="/imgs/den-tat.jpg";
+                break;
+            }
+            case '4': {
+                detected = "tắt quạt";
+                break;
+            }
+        }
+        txt.textContent = "detected: " + detected;
+    });
+
+</script>
+</html>
